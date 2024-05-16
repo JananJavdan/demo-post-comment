@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Comment</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        form input, form textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        form button {
+            padding: 10px 15px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #555;
+        }
+
+        .post {
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Add a New Comment</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="new_post.html">New Post</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <form id="new-comment-form">
+        <label for="post-id">Post ID:</label>
+        <input type="text" id="post-id" name="post-id" required>
+
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment" required></textarea>
+
+        <button type="submit">Submit</button>
+    </form>
+</main>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("new-comment-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const postId = document.getElementById("post-id").value;
+            const comment = document.getElementById("comment").value;
+            console.log("New comment submitted", { postId, comment });
+            alert("New comment submitted");
+        });
+    });
+</script>
+</body>
+</html>
