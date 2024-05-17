@@ -199,16 +199,6 @@
         <button type="submit">Update</button>
     </form>
 </main>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("update-post-form").addEventListener("submit", function(event) {
-            event.preventDefault();
-            const title = document.getElementById("title").value;
-            const content = document.getElementById("content").value;
-            console.log("Post updated", { title, content });
-            alert("Post updated");
-        });
-    });
-</script>
+
 </body>
 </html>
