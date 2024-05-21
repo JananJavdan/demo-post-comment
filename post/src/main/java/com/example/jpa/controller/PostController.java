@@ -3,43 +3,83 @@ package com.example.jpa.controller;
 import com.example.jpa.exception.ResourceNotFoundException;
 import com.example.jpa.model.Post;
 import com.example.jpa.repository.PostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
-@RestController
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/posts")
 public class PostController {
 
     @Autowired
     private PostRepository postRepository;
 
-    @GetMapping("/posts")
-    public Page<Post> getAllPosts(Pageable pageable) {
-        return postRepository.findAll(pageable);
+
+    @GetMapping("/list")
+    public String listPosts(Model model) {
+        List<Post> posts = postRepository.findAll();
+        model.addAttribute("posts", posts);
+        return "postList"; // Assuming this is the correct view name
     }
-    @PostMapping("/posts")
-    public Post createPost(@Valid @RequestBody Post post) {
-        return postRepository.save(post);
+
+    @GetMapping("/new")
+    public String showNewPostForm(Model model) {
+        Post post = new Post();
+        model.addAttribute("post", post);
+        return "newPost";
     }
-    @PutMapping("/posts/{postId}")
-    public Post updatePost(@PathVariable Long postId, @Valid @RequestBody
-    Post postRequest) {
-        return postRepository.findById(postId).map(post -> {
-            post.setTitle(postRequest.getTitle());
-            post.setDescription(postRequest.getDescription());
-            post.setContent(postRequest.getContent());
-            return postRepository.save(post);
-        }).orElseThrow(() -> new ResourceNotFoundException("PostId " + postId
-                + " not found"));
+
+    @PostMapping("/save")
+    public String createPost(@Valid Post post) {
+        postRepository.save(post);
+        return "redirect:/posts/list";
     }
-    @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<?> deletePost(@PathVariable Long postId) {
-        return postRepository.findById(postId).map(post -> {
-            postRepository.delete(post);
-            return ResponseEntity.ok().build();
-        }).orElseThrow(() -> new ResourceNotFoundException("PostId " + postId
-                + " not found"));
+
+    @GetMapping("/edit/{id}")
+    public String editPost(@PathVariable Long id, Model model) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id " + id));
+        model.addAttribute("post", post);
+        return "editPost";
+    }
+
+
+    @GetMapping("/view/{id}")
+    public String viewPost(@PathVariable Long id, Model model) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id " + id));
+        model.addAttribute("post", post);
+        return "viewPost";
+    }
+
+    @PutMapping("/edit/{id}")
+    public String updatePost(@PathVariable Long id, @Valid Post post) {
+        // Retrieve the existing post by ID
+        Post existingPost = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id " + id));
+
+        // Update the existing post with the new data
+        existingPost.setTitle(post.getTitle());
+        existingPost.setDescription(post.getDescription());
+        existingPost.setContent(post.getContent());
+
+        // Save the updated post
+        postRepository.save(existingPost);
+
+        // Redirect to the post list page
+        return "redirect:/posts/list";
+    }
+
+    @GetMapping ("/delete/{id}")
+    public String deletePost(@PathVariable("id") Long id) {
+        // Delete the post with the specified ID
+        postRepository.deleteById(id);
+
+        // Redirect to the post list page after deletion
+        return "redirect:/posts/list"; // Make sure the URL is correct
     }
 }

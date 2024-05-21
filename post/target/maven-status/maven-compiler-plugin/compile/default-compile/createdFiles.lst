@@ -1,0 +1,10 @@
+com\example\jpa\config\PostConfig.class
+com\example\jpa\model\Comment.class
+com\example\jpa\repository\PostRepository.class
+com\example\jpa\JpaOneToManyDemoApplication.class
+com\example\jpa\controller\PostController.class
+com\example\jpa\exception\ResourceNotFoundException.class
+com\example\jpa\model\AuditModel.class
+com\example\jpa\repository\CommentRepository.class
+com\example\jpa\controller\CommentController.class
+com\example\jpa\model\Post.class

@@ -1,8 +1,12 @@
 package com.example.jpa.model;
 
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,46 +17,35 @@ public class Post extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotNull
     @Size(max = 100)
-    @Column(unique = true)
     private String title;
-
     @NotNull
     @Size(max = 250)
     private String description;
+
+    public Post() {
+    }
 
     @NotNull
     @Lob
     private String content;
 
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "post")
     private Set<Comment> comments = new HashSet<>();
 
-    public Post(Long id, String title, String description, String content, Set<Comment> comments) {
-        this.id = id;
+    public Post(String title, String description, String content) {
         this.title = title;
         this.description = description;
         this.content = content;
-        this.comments = comments;
-    }
-
-    public Post(String title, String description, String content, Set<Comment> comments) {
-        this.title = title;
-        this.description = description;
-        this.content = content;
-        this.comments = comments;
-    }
-
-    public Post(Long id, String title, String description) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-    }
-
-    public Post() {
-
     }
 
     public Long getId() {
@@ -85,14 +78,6 @@ public class Post extends AuditModel {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
     }
 
     @Override

@@ -1,45 +1,28 @@
 package com.example.jpa.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.antlr.v4.runtime.misc.NotNull;
 import jakarta.persistence.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "comments")
 public class Comment extends AuditModel {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
     @Lob
     private String text;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "post_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
+    // @OnDelete(action = OnDeleteAction.CASCADE)
+    // @JsonIgnore
     private Post post;
 
-    public Comment(Long id, String text, Post post) {
-        this.id = id;
-        this.text = text;
-        this.post = post;
-    }
-
-    public Comment(String text, Post post) {
-        this.text = text;
-        this.post = post;
-    }
-
-    public Comment(Long id) {
-        this.id = id;
-    }
-
     public Comment() {
+    }
 
+    public Comment(String text) {
+        this.text = text;
     }
 
     public Long getId() {
